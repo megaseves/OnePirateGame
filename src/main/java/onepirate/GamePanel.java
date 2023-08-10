@@ -3,15 +3,15 @@ package onepirate;
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Runnable {
     // SCREEN settings
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
-    final int titleSize = originalTileSize * scale; // 48x48 tile
+    final int tileSize = originalTileSize * scale; // 48x48 tile
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
-    final int screenWidth = titleSize * maxScreenCol; // 768 pixels
-    final int screenHeight = titleSize * maxScreenRow; // 576 pixels
+    final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
     Thread gameThread;
 
@@ -20,7 +20,37 @@ public class GamePanel extends JPanel {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
 
+    }
+
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    @Override
+    public void run() {
+        while (gameThread != null) {
+            System.out.println("The game is running...");
+
+            update();
+
+            repaint();
+        }
+    }
+
+    public void update() {
 
     }
 
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+
+        g2.setColor(Color.white);
+
+        g2.fillRect(100, 100, tileSize, tileSize);
+
+        g2.dispose();
+    }
 }
